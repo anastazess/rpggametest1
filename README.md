@@ -226,10 +226,6 @@ echoes_of_the_fallen/
 ### Установка
 
 ```bash
-# Клонируйте репозиторий
-git clone https://github.com/sinnerdevdevdev/echoes-of-the-fallen.git
-cd echoes-of-the-fallen
-
 # Установите зависимости
 pip install pygame
 ```
