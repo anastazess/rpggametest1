@@ -1,166 +1,149 @@
 """
-Тест: диалоговая система.
+Тест диалогов в стиле Genshin Impact.
 Запуск: python test_dialogue.py
 """
 
 import pygame
+import math
+import random
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from game.constants import *
 from game.world.dialogue import DialogueBox
-from game.ui.notifications import NotificationManager
 
 
-# -------------------------------------------------------
-# Наборы диалогов для тестирования
-# -------------------------------------------------------
+# ── Диалоги ──────────────────────────────────────────────────────────
+
 DIALOGUES = {
-
-    "intro": {
-        "name": "Вступление в игру",
-        "color": (100, 150, 220),
+    "priestess": {
+        "name": "Верховная жрица",
         "lines": [
-            {"speaker": "???",
-             "text": "Эй, очнись! Ты в порядке?",
-             "portrait_color": (100, 150, 200)},
-            {"speaker": "Странник",
-             "text": "Мы нашли тебя без сознания у городских ворот. "
-                     "Ты помнишь, что произошло?",
-             "portrait_color": (100, 150, 200)},
-            {"speaker": "Вы",
-             "text": "Я... не помню. Где я?",
-             "portrait_color": (180, 140, 255)},
-            {"speaker": "Странник",
-             "text": "Это Валенхольм — последний оплот людей в этих землях. "
-                     "После Падения мир изменился навсегда...",
-             "portrait_color": (100, 150, 200)},
-            {"speaker": "Странник",
-             "text": "Если тебе некуда идти, загляни в Гильдию Искателей. "
-                     "Они всегда ищут новых рекрутов.",
-             "portrait_color": (100, 150, 200)},
-            {"speaker": "Вы",
-             "text": "Спасибо. Я разберусь.",
-             "portrait_color": (180, 140, 255)},
+            {"speaker": "Иссара",
+             "role": "Верховная жрица храма Авэлин",
+             "text": "Добро пожаловать в храм Авэлин, богини рассвета, исцеления и вечного света. Мы рады каждому страннику, ищущему покой.",
+             "portrait_color": (200, 170, 230)},
+            {"speaker": "Иссара",
+             "role": "Верховная жрица храма Авэлин",
+             "text": "Авэлин хранит равновесие между светом и тьмой. Без её благословения этот мир давно бы погрузился в хаос и забвение.",
+             "portrait_color": (200, 170, 230)},
+            {"speaker": "Иссара",
+             "role": "Верховная жрица храма Авэлин",
+             "text": "Я чувствую в тебе искру... Ты пришёл из-за Завесы, не так ли? Немногие выживают в том путешествии. Ты — особенный.",
+             "portrait_color": (200, 170, 230)},
+            {"speaker": "Герой",
+             "role": "",
+             "text": "Я не помню, как оказался здесь. Всё как в тумане...",
+             "portrait_color": (180, 200, 255)},
+            {"speaker": "Иссара",
+             "role": "Верховная жрица храма Авэлин",
+             "text": "Это нормально. Завеса стирает воспоминания. Но они вернутся — когда придёт время. А пока отдохни. Сёстры позаботятся о тебе.",
+             "portrait_color": (200, 170, 230)},
         ],
     },
-
     "guild": {
-        "name": "Гильдия Искателей",
-        "color": (200, 150, 100),
+        "name": "Магистр гильдии",
         "lines": [
-            {"speaker": "Регистратор",
-             "text": "Добро пожаловать в Гильдию Искателей! "
-                     "Я вижу, ты новенький.",
+            {"speaker": "Селина",
+             "role": "Магистр Гильдии Искателей",
+             "text": "Ты, должно быть, новый рекрут. Я наблюдала за тобой с момента, как ты вошёл в город. Впечатляющая выносливость для человека без памяти.",
              "portrait_color": (200, 150, 100)},
-            {"speaker": "Регистратор",
-             "text": "Мы занимаемся исследованием руин, охотой на монстров "
-                     "и поиском артефактов Древних. Работа опасная, но оплата щедрая.",
+            {"speaker": "Герой",
+             "role": "",
+             "text": "Вы знаете обо мне?",
+             "portrait_color": (180, 200, 255)},
+            {"speaker": "Селина",
+             "role": "Магистр Гильдии Искателей",
+             "text": "Я знаю обо всём, что происходит в Валенхольме. Это моя работа. Гильдия Искателей — это не просто организация. Это семья, которая защищает город от того, что скрывается во тьме.",
              "portrait_color": (200, 150, 100)},
-            {"speaker": "Вы",
-             "text": "Звучит интересно. Как вступить?",
-             "portrait_color": (180, 140, 255)},
-            {"speaker": "Регистратор",
-             "text": "Для начала нужно выполнить одно пробное задание. "
-                     "Это просто — сходи в Туманный лес и принеси мне "
-                     "три синих гриба. Они светятся в темноте, не ошибёшься.",
+            {"speaker": "Селина",
+             "role": "Магистр Гильдии Искателей",
+             "text": "Если хочешь вступить — докажи свою ценность. Принеси мне три синих гриба из Туманного леса. Просто? Не совсем. Там водятся теневые волки.",
              "portrait_color": (200, 150, 100)},
-            {"speaker": "Вы",
-             "text": "Принято. Я скоро вернусь.",
-             "portrait_color": (180, 140, 255)},
-            {"speaker": "Регистратор",
-             "text": "Удачи. И будь осторожен — в лесу водятся теневые волки.",
+            {"speaker": "Герой",
+             "role": "",
+             "text": "Я справлюсь. Когда выходить?",
+             "portrait_color": (180, 200, 255)},
+            {"speaker": "Селина",
+             "role": "Магистр Гильдии Искателей",
+             "text": "Хм, мне нравится твоя решительность. Отправляйся, когда будешь готов. И помни — возвращайся живым. Мертвые рекруты мне не нужны.",
              "portrait_color": (200, 150, 100)},
         ],
     },
-
-    "merchant": {
-        "name": "Торговец",
-        "color": (100, 200, 100),
+    "blacksmith": {
+        "name": "Кузнец",
         "lines": [
-            {"speaker": "Торговец Браен",
-             "text": "Добро пожаловать в мою лавку, путник! "
-                     "У меня найдётся всё, что нужно настоящему герою.",
-             "portrait_color": (100, 200, 100)},
-            {"speaker": "Вы",
-             "text": "Что у тебя есть на продажу?",
-             "portrait_color": (180, 140, 255)},
-            {"speaker": "Торговец Браен",
-             "text": "Зелья здоровья, магические свитки, отличное оружие! "
-                     "Сегодня особая скидка на зелья — 20%, не упусти!",
-             "portrait_color": (100, 200, 100)},
-            {"speaker": "Вы",
-             "text": "Интересно, но сейчас у меня маловато монет.",
-             "portrait_color": (180, 140, 255)},
-            {"speaker": "Торговец Браен",
-             "text": "Понимаю. Заходи когда разбогатеешь — "
-                     "мои цены лучшие в Валенхольме!",
-             "portrait_color": (100, 200, 100)},
+            {"speaker": "Горан",
+             "role": "Мастер-кузнец Валенхольма",
+             "text": "*звон металла* А, клиент! Подожди... Последний удар... Вот! Готово. Чего желаешь, путник?",
+             "portrait_color": (150, 100, 80)},
+            {"speaker": "Герой",
+             "role": "",
+             "text": "Мне нужно хорошее оружие.",
+             "portrait_color": (180, 200, 255)},
+            {"speaker": "Горан",
+             "role": "Мастер-кузнец Валенхольма",
+             "text": "Хорошее? У меня только лучшее! Каждый клинок я кую три дня и три ночи. Сталь закаляю в ледяной воде горного ручья, а рукоять оборачиваю кожей северного оленя.",
+             "portrait_color": (150, 100, 80)},
+            {"speaker": "Горан",
+             "role": "Мастер-кузнец Валенхольма",
+             "text": "Вот что я тебе скажу — принеси мне железной руды, и я выкую тебе такой меч, что даже теневые волки разбегутся от одного его блеска!",
+             "portrait_color": (150, 100, 80)},
         ],
     },
-
-    "old_man": {
-        "name": "Старый мудрец",
-        "color": (180, 160, 220),
+    "sage": {
+        "name": "Мудрец",
         "lines": [
-            {"speaker": "Мудрец Аэлрон",
-             "text": "А, молодой путник... Я ждал тебя. "
-                     "Звёзды предрекли твоё появление ещё три луны назад.",
+            {"speaker": "Аэлрон",
+             "role": "Хранитель древних знаний",
+             "text": "А, молодой путник... Я ждал тебя. Звёзды предрекли твоё появление ещё три луны назад. Садись, нам нужно поговорить.",
              "portrait_color": (180, 160, 220)},
-            {"speaker": "Вы",
-             "text": "Вы меня знаете? Мы раньше встречались?",
-             "portrait_color": (180, 140, 255)},
-            {"speaker": "Мудрец Аэлрон",
-             "text": "Нет. Но Тьма знает тебя. "
-                     "То, что ты ищешь — Осколок Рассвета — "
-                     "существует. Но цена велика.",
+            {"speaker": "Герой",
+             "role": "",
+             "text": "Откуда вы меня знаете? Я никого здесь не знаю...",
+             "portrait_color": (180, 200, 255)},
+            {"speaker": "Аэлрон",
+             "role": "Хранитель древних знаний",
+             "text": "Я не знаю тебя. Но Тьма — знает. И то, что ты ищешь — Осколок Рассвета — существует. Он спрятан там, где свет встречается с тенью.",
              "portrait_color": (180, 160, 220)},
-            {"speaker": "Вы",
-             "text": "Откуда вы знаете, что я ищу?",
-             "portrait_color": (180, 140, 255)},
-            {"speaker": "Мудрец Аэлрон",
-             "text": "Потому что все, кто приходит из-за Завесы, "
-                     "ищут одно и то же. Ответы на вопросы, "
-                     "которые они боятся задать вслух.",
+            {"speaker": "Аэлрон",
+             "role": "Хранитель древних знаний",
+             "text": "Найди три Хранителя Памяти. Они откроют тебе путь. Первый живёт в тени старой башни, что за Туманным лесом. Но будь осторожен — не все хранители дружелюбны.",
              "portrait_color": (180, 160, 220)},
-            {"speaker": "Мудрец Аэлрон",
-             "text": "Найди три Хранителя Памяти. "
-                     "Они укажут тебе путь. "
-                     "Начни с того, кто живёт в тени башни.",
+            {"speaker": "Герой",
+             "role": "",
+             "text": "Что такое Завеса? Почему я ничего не помню?",
+             "portrait_color": (180, 200, 255)},
+            {"speaker": "Аэлрон",
+             "role": "Хранитель древних знаний",
+             "text": "Завеса — это граница между мирами. Те, кто проходят сквозь неё, теряют себя. Но иногда... иногда это цена, которую стоит заплатить.",
              "portrait_color": (180, 160, 220)},
-            {"speaker": "Вы",
-             "text": "Подождите — что такое Завеса?",
-             "portrait_color": (180, 140, 255)},
-            {"speaker": "Мудрец Аэлрон",
-             "text": "...",
+            {"speaker": "Аэлрон",
+             "role": "Хранитель древних знаний",
+             "text": "Не все, кто блуждает — потеряны. Но те, кто пришёл из-за Завесы... никогда не вернутся прежними.",
              "portrait_color": (180, 160, 220)},
         ],
     },
-
-    "enemy": {
-        "name": "Враждебный бандит",
-        "color": (220, 80, 80),
+    "hunter": {
+        "name": "Охотник",
         "lines": [
-            {"speaker": "Бандит",
-             "text": "Стой! Кошелёк или жизнь, чужеземец.",
-             "portrait_color": (200, 80, 60)},
-            {"speaker": "Вы",
-             "text": "Ты выбрал не ту цель.",
-             "portrait_color": (180, 140, 255)},
-            {"speaker": "Бандит",
-             "text": "Смелые слова для того, кто стоит один "
-                     "против пятерых моих людей. "
-                     "Последний шанс, герой.",
-             "portrait_color": (200, 80, 60)},
-            {"speaker": "Вы",
-             "text": "Твои люди уже убегают.",
-             "portrait_color": (180, 140, 255)},
-            {"speaker": "Бандит",
-             "text": "...Что?! Трусы! "
-                     "Ладно, ты мне нравишься. "
-                     "Убирайся, пока я добрый.",
-             "portrait_color": (200, 80, 60)},
+            {"speaker": "Рейн",
+             "role": "Охотник из Северных пределов",
+             "text": "Тише. Видишь те следы? Теневой волк. Огромный. Прошёл здесь не больше часа назад. Они становятся всё смелее.",
+             "portrait_color": (130, 115, 100)},
+            {"speaker": "Герой",
+             "role": "",
+             "text": "Теневые волки? Насколько они опасны?",
+             "portrait_color": (180, 200, 255)},
+            {"speaker": "Рейн",
+             "role": "Охотник из Северных пределов",
+             "text": "Обычный волк отступит перед огнём. Теневой — нет. Он рождён из Тьмы, и Тьма не боится пламени. Ему нужен свет. Настоящий, божественный свет.",
+             "portrait_color": (130, 115, 100)},
+            {"speaker": "Рейн",
+             "role": "Охотник из Северных пределов",
+             "text": "Если собираешься в Туманный лес — загляни сначала в храм. Попроси благословение у жрицы. Без него ты не продержишься и ночи.",
+             "portrait_color": (130, 115, 100)},
         ],
     },
 }
@@ -170,185 +153,151 @@ def main():
     pygame.init()
 
     screen = pygame.display.set_mode((1280, 720))
-    pygame.display.set_caption("Тест диалогов — Echoes of the Fallen")
+    pygame.display.set_caption("Тест диалогов (Genshin style)")
 
-    clock         = pygame.time.Clock()
-    dialogue      = DialogueBox(screen)
-    notifications = NotificationManager(screen)
+    clock = pygame.time.Clock()
+    dialogue = DialogueBox(screen)
 
-    font_title  = pygame.font.SysFont("georgia",  28, bold=True)
-    font_sub    = pygame.font.SysFont("segoeui",  18)
-    font_small  = pygame.font.SysFont("segoeui",  15)
-    font_hint   = pygame.font.SysFont("segoeui",  13)
+    font_title  = pygame.font.SysFont("georgia", 28, bold=True)
+    font_sub    = pygame.font.SysFont("segoeui", 16)
+    font_small  = pygame.font.SysFont("segoeui", 14)
+    font_hint   = pygame.font.SysFont("segoeui", 12)
 
     dialogue_keys = list(DIALOGUES.keys())
     selected = 0
-    time_acc = 0.0
+    mode = "select"  # select | dialogue | done
 
-    # Простой фоновый «город»
+    # Фон — красивый пейзаж
     bg = pygame.Surface((1280, 720))
-    for y in range(720):
-        ratio = y / 720
-        r = int(30 + ratio * 20)
-        g = int(50 + ratio * 30)
-        b = int(25 + ratio * 15)
+    # Небо
+    for y in range(400):
+        ratio = y / 400
+        r = int(40 + ratio * 80)
+        g = int(60 + ratio * 100)
+        b = int(120 + ratio * 80)
         pygame.draw.line(bg, (r, g, b), (0, y), (1280, y))
-
-    # Несколько домиков для атмосферы
-    for bx, bw in [(100, 80), (250, 100), (500, 90),
-                   (700, 110), (950, 85), (1100, 95)]:
-        h = 80 + (bx % 3) * 20
-        by = 400 - h
-        pygame.draw.rect(bg, (60, 50, 70), (bx, by, bw, h))
-        pts = [(bx - 10, by + 5), (bx + bw // 2, by - 30),
-               (bx + bw + 10, by + 5)]
-        pygame.draw.polygon(bg, (100, 50, 50), pts)
-
+    # Горы
+    import math as m
+    points = [(0, 720)]
+    for x in range(0, 1281, 3):
+        y = 350 + m.sin(x * 0.005) * 80 + m.sin(x * 0.01) * 40
+        points.append((x, int(y)))
+    points.append((1280, 720))
+    pygame.draw.polygon(bg, (30, 45, 35), points)
+    # Передний план
+    points2 = [(0, 720)]
+    for x in range(0, 1281, 3):
+        y = 450 + m.sin(x * 0.008 + 2) * 60 + m.sin(x * 0.015) * 25
+        points2.append((x, int(y)))
+    points2.append((1280, 720))
+    pygame.draw.polygon(bg, (20, 35, 25), points2)
     # Земля
-    pygame.draw.rect(bg, (55, 90, 40), (0, 400, 1280, 320))
+    pygame.draw.rect(bg, (15, 25, 18), (0, 550, 1280, 170))
 
     def draw_selector():
-        """Панель выбора диалога."""
-        panel_w = 340
-        panel_h = len(DIALOGUES) * 58 + 70
-        panel_x = 1280 // 2 - panel_w // 2
-        panel_y = 720  // 2 - panel_h // 2
+        sw, sh = screen.get_size()
+        panel_w = 400
+        panel_h = len(DIALOGUES) * 65 + 100
+        panel_x = sw // 2 - panel_w // 2
+        panel_y = sh // 2 - panel_h // 2
 
         surf = pygame.Surface((panel_w, panel_h), pygame.SRCALPHA)
-        pygame.draw.rect(surf, (18, 15, 28, 230),
-                         (0, 0, panel_w, panel_h), border_radius=14)
-        pygame.draw.rect(surf, (*COLOR_PRIMARY_DARK, 160),
-                         (0, 0, panel_w, panel_h), width=2, border_radius=14)
+        pygame.draw.rect(surf, (10, 10, 18, 230),
+                         surf.get_rect(), border_radius=14)
+        pygame.draw.rect(surf, (100, 90, 120, 150),
+                         surf.get_rect(), width=1, border_radius=14)
         screen.blit(surf, (panel_x, panel_y))
 
-        title_s = font_title.render("Выбор диалога", True, COLOR_PRIMARY_LIGHT)
-        screen.blit(title_s, (panel_x + panel_w // 2 - title_s.get_width() // 2,
-                               panel_y + 16))
+        title_s = font_title.render("Выбор диалога", True, (255, 255, 255))
+        screen.blit(title_s,
+                    (panel_x + panel_w // 2 - title_s.get_width() // 2,
+                     panel_y + 18))
 
         for i, key in enumerate(dialogue_keys):
-            data  = DIALOGUES[key]
+            data = DIALOGUES[key]
             is_sel = (i == selected)
+            iy = panel_y + 70 + i * 65
 
-            item_y = panel_y + 60 + i * 58
-            item_w = panel_w - 40
-
-            # Фон элемента
-            item_surf = pygame.Surface((item_w, 48), pygame.SRCALPHA)
+            item = pygame.Surface((panel_w - 40, 55), pygame.SRCALPHA)
             if is_sel:
-                pygame.draw.rect(item_surf, (*data["color"], 50),
-                                 (0, 0, item_w, 48), border_radius=8)
-                pygame.draw.rect(item_surf, (*data["color"], 200),
-                                 (0, 0, item_w, 48), width=2, border_radius=8)
+                pygame.draw.rect(item, (255, 255, 255, 20),
+                                 item.get_rect(), border_radius=8)
+                pygame.draw.rect(item, (255, 255, 255, 120),
+                                 item.get_rect(), width=1, border_radius=8)
             else:
-                pygame.draw.rect(item_surf, (30, 26, 45, 180),
-                                 (0, 0, item_w, 48), border_radius=8)
-                pygame.draw.rect(item_surf, (60, 50, 80, 120),
-                                 (0, 0, item_w, 48), width=1, border_radius=8)
-            screen.blit(item_surf, (panel_x + 20, item_y))
+                pygame.draw.rect(item, (255, 255, 255, 8),
+                                 item.get_rect(), border_radius=8)
+            screen.blit(item, (panel_x + 20, iy))
 
-            # Номер клавиши
-            key_text = f"[{i + 1}]"
-            key_col  = data["color"] if is_sel else COLOR_TEXT_DIM
-            key_s = font_sub.render(key_text, True, key_col)
-            screen.blit(key_s, (panel_x + 30, item_y + 5))
+            # Номер
+            num_col = (255, 255, 255) if is_sel else (120, 120, 130)
+            screen.blit(font_sub.render(f"[{i+1}]", True, num_col),
+                        (panel_x + 30, iy + 8))
 
-            # Название
-            name_col = COLOR_TEXT if is_sel else COLOR_TEXT_DIM
-            name_s = font_small.render(data["name"], True, name_col)
-            screen.blit(name_s, (panel_x + 70, item_y + 4))
+            # Имя
+            name_col = (255, 255, 255) if is_sel else (180, 180, 190)
+            screen.blit(font_small.render(data["name"], True, name_col),
+                        (panel_x + 70, iy + 6))
 
-            # Кол-во реплик
-            count_text = f"{len(data['lines'])} реплик"
-            count_s = font_hint.render(count_text, True, COLOR_TEXT_DIM)
-            screen.blit(count_s, (panel_x + 70, item_y + 26))
+            # Реплик
+            count = f"{len(data['lines'])} реплик"
+            screen.blit(font_hint.render(count, True, (120, 120, 130)),
+                        (panel_x + 70, iy + 28))
+
+            # Первая строка диалога
+            first = data["lines"][0]["speaker"]
+            screen.blit(font_hint.render(first, True, (100, 100, 110)),
+                        (panel_x + 180, iy + 28))
 
         # Подсказка
-        hint_text = "1–5: выбор   ENTER/E: запустить   ESC: выход"
-        hint_s = font_hint.render(hint_text, True, COLOR_TEXT_DIM)
-        screen.blit(hint_s, (panel_x + panel_w // 2 - hint_s.get_width() // 2,
-                              panel_y + panel_h - 22))
-
-    def draw_replay_hint():
-        """Подсказка когда диалог завершён."""
-        text = "Диалог завершён  |  ENTER — начать снова  |  ESC — вернуться к выбору"
-        sw = screen.get_width()
-        sh = screen.get_height()
-        s = font_hint.render(text, True, COLOR_TEXT_DIM)
-        bgr = pygame.Surface((s.get_width() + 24, 26), pygame.SRCALPHA)
-        pygame.draw.rect(bgr, (18, 15, 28, 200), bgr.get_rect(), border_radius=6)
-        screen.blit(bgr, (sw // 2 - bgr.get_width() // 2, sh - 170))
-        screen.blit(s,   (sw // 2 - s.get_width()   // 2, sh - 166))
-
-    mode = "select"   # "select" | "dialogue" | "done"
+        hint = "↑↓ / 1-5  выбор     ENTER  запуск     ESC  выход"
+        screen.blit(font_hint.render(hint, True, (100, 100, 110)),
+                    (panel_x + panel_w // 2 - font_hint.size(hint)[0] // 2,
+                     panel_y + panel_h - 25))
 
     running = True
     while running:
         dt = clock.tick(60) / 1000.0
-        time_acc += dt
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
             if event.type == pygame.KEYDOWN:
-
                 if mode == "select":
                     if event.key == pygame.K_ESCAPE:
                         running = False
-
-                    # Цифровые клавиши 1–5
-                    for i, _ in enumerate(dialogue_keys):
-                        if event.key == getattr(pygame, f"K_{i + 1}", None):
-                            selected = i
-
-                    # Стрелки
                     if event.key == pygame.K_UP:
                         selected = (selected - 1) % len(dialogue_keys)
                     if event.key == pygame.K_DOWN:
                         selected = (selected + 1) % len(dialogue_keys)
-
-                    # Запуск диалога
+                    for i in range(len(dialogue_keys)):
+                        if event.key == getattr(pygame, f"K_{i+1}", None):
+                            selected = i
                     if event.key in (pygame.K_RETURN, pygame.K_e, pygame.K_SPACE):
-                        key  = dialogue_keys[selected]
-                        data = DIALOGUES[key]
-                        dialogue.start_dialogue(data["lines"])
-                        notifications.show_info(
-                            f"Начат диалог: {data['name']}",
-                            title="Диалог"
-                        )
+                        key = dialogue_keys[selected]
+                        dialogue.start_dialogue(DIALOGUES[key]["lines"])
                         mode = "dialogue"
 
                 elif mode == "dialogue":
-                    # ESC из диалога — возврат к выбору
                     if event.key == pygame.K_ESCAPE:
                         dialogue.active = False
                         mode = "select"
-                    else:
-                        if dialogue.handle_event(event):
-                            if not dialogue.active:
-                                mode = "done"
-                                notifications.show_success(
-                                    f"Диалог «{DIALOGUES[dialogue_keys[selected]]['name']}» завершён"
-                                )
 
                 elif mode == "done":
                     if event.key == pygame.K_ESCAPE:
                         mode = "select"
                     if event.key in (pygame.K_RETURN, pygame.K_e, pygame.K_SPACE):
-                        key  = dialogue_keys[selected]
-                        data = DIALOGUES[key]
-                        dialogue.start_dialogue(data["lines"])
+                        key = dialogue_keys[selected]
+                        dialogue.start_dialogue(DIALOGUES[key]["lines"])
                         mode = "dialogue"
 
-            # Клик по диалогу
-            if mode == "dialogue" and event.type == pygame.MOUSEBUTTONDOWN:
+            if mode == "dialogue":
                 if dialogue.handle_event(event):
                     if not dialogue.active:
                         mode = "done"
 
-        # Обновление
         dialogue.update(dt)
-        notifications.update(dt)
 
         # Отрисовка
         screen.blit(bg, (0, 0))
@@ -358,10 +307,11 @@ def main():
         elif mode == "dialogue":
             dialogue.draw()
         elif mode == "done":
-            draw_replay_hint()
-            dialogue.draw()
+            # Подсказка
+            hint = "ENTER — повтор  |  ESC — к выбору"
+            hs = font_hint.render(hint, True, (150, 150, 160))
+            screen.blit(hs, (640 - hs.get_width() // 2, 680))
 
-        notifications.draw()
         pygame.display.flip()
 
     pygame.quit()

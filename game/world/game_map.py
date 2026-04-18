@@ -144,6 +144,7 @@ def make_wanderer(x, y, name, role,
 
     default_dialogues = [
         {"speaker": name,
+         "role": role,
          "text": random.choice([
              "Добрый день, путник!",
              "Чудесная погода сегодня.",
@@ -279,10 +280,10 @@ class GameMap:
             zone_x=360, zone_y=460, zone_w=180, zone_h=180,
             outfit=(100, 80, 70), hair_style="long",
             dialogues=[
-                {"speaker": "Торговка Марта",
+                {"speaker": "Марта", "role": "Торговка на площади",
                  "text": "Свежие яблоки! Покупайте свежие яблоки!",
                  "portrait_color": (180, 140, 110)},
-                {"speaker": "Торговка Марта",
+                {"speaker": "Марта", "role": "Торговка на площади",
                  "text": "Три яблока за медяк — лучшая цена в городе!",
                  "portrait_color": (180, 140, 110)},
             ],
@@ -295,7 +296,7 @@ class GameMap:
             outfit=(80, 95, 70), hair_style="short",
             has_hat=True, speed=28,
             dialogues=[
-                {"speaker": "Фермер Том",
+                {"speaker": "Том", "role": "Фермер",
                  "text": "Урожай в этом году неплохой, если волки не сожрут.",
                  "portrait_color": (160, 130, 100)},
             ],
@@ -308,10 +309,10 @@ class GameMap:
             outfit=(70, 60, 55), hair_style="bald",
             has_beard=True, speed=20,
             dialogues=[
-                {"speaker": "Якоб",
+                {"speaker": "Якоб", "role": "Завсегдатай таверны",
                  "text": "Ик... ещё один стаканчик не помешает...",
                  "portrait_color": (140, 110, 90)},
-                {"speaker": "Якоб",
+                {"speaker": "Якоб", "role": "Завсегдатай таверны",
                  "text": "Я те говорю... дракон! Настоящий! Вот этими глазами видел.",
                  "portrait_color": (140, 110, 90)},
             ],
@@ -324,10 +325,10 @@ class GameMap:
             outfit=(90, 110, 140), hair_style="short",
             speed=80,
             dialogues=[
-                {"speaker": "Пит",
+                {"speaker": "Пит", "role": "Мальчишка",
                  "text": "Ты искатель?! Покажи свой меч!",
                  "portrait_color": (200, 170, 140)},
-                {"speaker": "Пит",
+                {"speaker": "Пит", "role": "Мальчишка",
                  "text": "Когда вырасту — стану самым крутым искателем!",
                  "portrait_color": (200, 170, 140)},
             ],
@@ -340,10 +341,10 @@ class GameMap:
             outfit=(120, 115, 130), hair_style="bald",
             accessory="hood", speed=22,
             dialogues=[
-                {"speaker": "Монах Эриус",
+                {"speaker": "Эриус", "role": "Монах храма Авэлин",
                  "text": "Свет Создателя да пребудет с тобой, путник.",
                  "portrait_color": (170, 160, 190)},
-                {"speaker": "Монах Эриус",
+                {"speaker": "Эриус", "role": "Монах храма Авэлин",
                  "text": "Часовня открыта для всех. Зайди, обрети покой.",
                  "portrait_color": (170, 160, 190)},
             ],
@@ -356,10 +357,10 @@ class GameMap:
             outfit=(110, 100, 115), hair_style="long",
             has_beard=False, speed=18,
             dialogues=[
-                {"speaker": "Хельга",
+                {"speaker": "Хельга", "role": "Пожилая жительница",
                  "text": "В мои годы уже и ноги не те... А ты куда спешишь?",
                  "portrait_color": (190, 165, 150)},
-                {"speaker": "Хельга",
+                {"speaker": "Хельга", "role": "Пожилая жительница",
                  "text": "Осторожней, молодой. Я помню, как этот город был другим.",
                  "portrait_color": (190, 165, 150)},
             ],
@@ -372,7 +373,7 @@ class GameMap:
             outfit=(65, 80, 90), hair_style="short",
             has_beard=True, speed=25,
             dialogues=[
-                {"speaker": "Рыбак Олег",
+                {"speaker": "Олег", "role": "Рыбак",
                  "text": "Хорошая рыбалка сегодня. Хочешь купить рыбку?",
                  "portrait_color": (130, 150, 160)},
             ],
@@ -385,7 +386,7 @@ class GameMap:
             outfit=(60, 55, 55), hair_style="short",
             accessory="apron", speed=45,
             dialogues=[
-                {"speaker": "Эрик",
+                {"speaker": "Эрик", "role": "Подмастерье кузнеца",
                  "text": "Горан послал за углём. Некогда болтать!",
                  "portrait_color": (150, 120, 100)},
             ],
@@ -398,10 +399,10 @@ class GameMap:
             outfit=(110, 95, 130), hair_style="ponytail",
             has_hat=True, speed=30,
             dialogues=[
-                {"speaker": "Лерой",
+                {"speaker": "Лерой", "role": "Дворянин",
                  "text": "Позвольте! Вы задели мой плащ, невежа.",
                  "portrait_color": (160, 140, 190)},
-                {"speaker": "Лерой",
+                {"speaker": "Лерой", "role": "Дворянин",
                  "text": "Я пожалуюсь старосте на состояние этих мостовых!",
                  "portrait_color": (160, 140, 190)},
             ],
@@ -414,15 +415,25 @@ class GameMap:
             outfit=(70, 90, 80), hair_style="long",
             has_beard=True, accessory="hood", speed=20,
             dialogues=[
-                {"speaker": "Алхимик Сол",
+                {"speaker": "Сол", "role": "Алхимик",
                  "text": "Не трогай те зелья! Они нестабильны.",
                  "portrait_color": (120, 160, 140)},
-                {"speaker": "Алхимик Сол",
-                 "text": "Мне нужны синие грибы из Туманного леса. "
-                         "Принесёшь — хорошо заплачу.",
+                {"speaker": "Сол", "role": "Алхимик",
+                 "text": "Мне нужны синие грибы из Туманного леса. Принесёшь — хорошо заплачу.",
                  "portrait_color": (120, 160, 140)},
             ],
         ))
+
+        signpost_guard = create_guard()
+        signpost_guard.x, signpost_guard.y = 1720, 560
+        signpost_guard.name = "Стражник у выхода"
+        signpost_guard.dialogues = [
+            {"speaker": "Стражник",
+             "role": "Городская стража Валенхольма",
+             "text": "За воротами — поля Валенхольма. Дальше — Туманный лес. Будь осторожен.",
+             "portrait_color": (120, 120, 140)},
+        ]
+        self.street_npcs.append(signpost_guard)
 
         # Странник (приезжий)
         self.street_npcs.append(make_wanderer(
@@ -431,14 +442,15 @@ class GameMap:
             outfit=(85, 80, 100), hair_style="long",
             speed=38,
             dialogues=[
-                {"speaker": "Странник",
+                {"speaker": "Странник", "role": "Путешественник с севера",
                  "text": "Я пришёл из Северных пределов. Дорога была нелёгкой.",
                  "portrait_color": (150, 145, 170)},
-                {"speaker": "Странник",
+                {"speaker": "Странник", "role": "Путешественник с севера",
                  "text": "На севере тоже неспокойно. Тьма наступает отовсюду.",
                  "portrait_color": (150, 145, 170)},
             ],
         ))
+
 
     # ── Декорации ────────────────────────────────────────────────────
 

@@ -240,20 +240,22 @@ class NPC:
 
 def create_blacksmith() -> NPC:
     appearance = NPCAppearance(
-        body_color=(60, 50, 50),
-        skin_color=(200, 160, 130),
-        hair_color=(40, 30, 25),
-        hair_style="bald",
-        outfit_color=(80, 60, 50),
-        has_beard=True,
-        accessory="apron"
+        body_color=(60, 50, 50), skin_color=(200, 160, 130),
+        hair_color=(40, 30, 25), hair_style="bald",
+        outfit_color=(80, 60, 50), has_beard=True, accessory="apron"
     )
     dialogues = [
-        {"speaker": "Кузнец Горан", "text": "*Удар молота* Чего желаешь, путник?",
+        {"speaker": "Горан",
+         "role": "Мастер-кузнец Валенхольма",
+         "text": "*Удар молота* Чего желаешь, путник?",
          "portrait_color": (150, 100, 80)},
-        {"speaker": "Кузнец Горан", "text": "Мои клинки — лучшие в Валенхольме. Спроси любого стражника.",
+        {"speaker": "Горан",
+         "role": "Мастер-кузнец Валенхольма",
+         "text": "Мои клинки — лучшие в Валенхольме. Спроси любого стражника.",
          "portrait_color": (150, 100, 80)},
-        {"speaker": "Кузнец Горан", "text": "Если принесёшь железной руды, выкую что-нибудь особенное.",
+        {"speaker": "Горан",
+         "role": "Мастер-кузнец Валенхольма",
+         "text": "Если принесёшь железной руды, выкую что-нибудь особенное.",
          "portrait_color": (150, 100, 80)},
     ]
     npc = NPC(0, 0, "Кузнец Горан", appearance, dialogues, "blacksmith")
@@ -263,20 +265,22 @@ def create_blacksmith() -> NPC:
 
 def create_merchant() -> NPC:
     appearance = NPCAppearance(
-        body_color=(60, 90, 60),
-        skin_color=(235, 200, 170),
-        hair_color=(100, 70, 40),
-        hair_style="short",
-        outfit_color=(70, 100, 70),
-        has_hat=True,
-        hat_color=(60, 80, 60)
+        body_color=(60, 90, 60), skin_color=(235, 200, 170),
+        hair_color=(100, 70, 40), hair_style="short",
+        outfit_color=(70, 100, 70), has_hat=True, hat_color=(60, 80, 60)
     )
     dialogues = [
-        {"speaker": "Торговец Браен", "text": "Добро пожаловать! У меня есть всё для настоящего героя!",
+        {"speaker": "Браен",
+         "role": "Торговец снаряжением",
+         "text": "Добро пожаловать! У меня есть всё для настоящего героя!",
          "portrait_color": (100, 180, 100)},
-        {"speaker": "Торговец Браен", "text": "Зелья, свитки, снаряжение — по лучшим ценам!",
+        {"speaker": "Браен",
+         "role": "Торговец снаряжением",
+         "text": "Зелья, свитки, снаряжение — по лучшим ценам!",
          "portrait_color": (100, 180, 100)},
-        {"speaker": "Торговец Браен", "text": "Скидка для членов Гильдии — 10%!",
+        {"speaker": "Браен",
+         "role": "Торговец снаряжением",
+         "text": "Скидка для членов Гильдии — 10%!",
          "portrait_color": (100, 180, 100)},
     ]
     npc = NPC(0, 0, "Торговец Браен", appearance, dialogues, "merchant")
@@ -286,19 +290,22 @@ def create_merchant() -> NPC:
 
 def create_innkeeper() -> NPC:
     appearance = NPCAppearance(
-        body_color=(100, 70, 50),
-        skin_color=(220, 180, 150),
-        hair_color=(80, 50, 30),
-        hair_style="short",
-        outfit_color=(120, 80, 50),
-        has_beard=True,
+        body_color=(100, 70, 50), skin_color=(220, 180, 150),
+        hair_color=(80, 50, 30), hair_style="short",
+        outfit_color=(120, 80, 50), has_beard=True,
     )
     dialogues = [
-        {"speaker": "Трактирщик Олаф", "text": "Добро пожаловать в 'Пьяного Грифона'!",
+        {"speaker": "Олаф",
+         "role": "Хозяин таверны «Пьяный Грифон»",
+         "text": "Добро пожаловать в 'Пьяного Грифона'!",
          "portrait_color": (180, 120, 80)},
-        {"speaker": "Трактирщик Олаф", "text": "Эль, горячий ужин или комната на ночь?",
+        {"speaker": "Олаф",
+         "role": "Хозяин таверны «Пьяный Грифон»",
+         "text": "Эль, горячий ужин или комната на ночь?",
          "portrait_color": (180, 120, 80)},
-        {"speaker": "Трактирщик Олаф", "text": "За новостями — к завсегдатаям у камина.",
+        {"speaker": "Олаф",
+         "role": "Хозяин таверны «Пьяный Грифон»",
+         "text": "За новостями — к завсегдатаям у камина.",
          "portrait_color": (180, 120, 80)},
     ]
     npc = NPC(0, 0, "Трактирщик Олаф", appearance, dialogues, "innkeeper")
@@ -308,19 +315,22 @@ def create_innkeeper() -> NPC:
 
 def create_guild_master() -> NPC:
     appearance = NPCAppearance(
-        body_color=(70, 60, 100),
-        skin_color=(225, 185, 155),
-        hair_color=(50, 50, 60),
-        hair_style="ponytail",
-        outfit_color=(80, 70, 120),
-        accessory="cape"
+        body_color=(70, 60, 100), skin_color=(225, 185, 155),
+        hair_color=(50, 50, 60), hair_style="ponytail",
+        outfit_color=(80, 70, 120), accessory="cape"
     )
     dialogues = [
-        {"speaker": "Магистр Селина", "text": "Ты должно быть новый рекрут.",
+        {"speaker": "Селина",
+         "role": "Магистр Гильдии Искателей",
+         "text": "Ты должно быть новый рекрут.",
          "portrait_color": (200, 150, 100)},
-        {"speaker": "Магистр Селина", "text": "Гильдия Искателей — это честь и ответственность.",
+        {"speaker": "Селина",
+         "role": "Магистр Гильдии Искателей",
+         "text": "Гильдия Искателей — это честь и ответственность.",
          "portrait_color": (200, 150, 100)},
-        {"speaker": "Магистр Селина", "text": "Докажи свою ценность, и двери откроются.",
+        {"speaker": "Селина",
+         "role": "Магистр Гильдии Искателей",
+         "text": "Докажи свою ценность, и двери откроются.",
          "portrait_color": (200, 150, 100)},
     ]
     npc = NPC(0, 0, "Магистр Селина", appearance, dialogues, "guild_master")
@@ -330,18 +340,18 @@ def create_guild_master() -> NPC:
 
 def create_guard() -> NPC:
     appearance = NPCAppearance(
-        body_color=(80, 80, 90),
-        skin_color=(210, 175, 145),
-        hair_color=(40, 35, 30),
-        hair_style="short",
-        outfit_color=(100, 100, 110),
-        hat_color=(80, 80, 90),
-        has_hat=True
+        body_color=(80, 80, 90), skin_color=(210, 175, 145),
+        hair_color=(40, 35, 30), hair_style="short",
+        outfit_color=(100, 100, 110), hat_color=(80, 80, 90), has_hat=True
     )
     dialogues = [
-        {"speaker": "Стражник", "text": "Добро пожаловать в Валенхольм.",
+        {"speaker": "Стражник",
+         "role": "Городская стража Валенхольма",
+         "text": "Добро пожаловать в Валенхольм.",
          "portrait_color": (120, 120, 140)},
-        {"speaker": "Стражник", "text": "Веди себя прилично — и проблем не будет.",
+        {"speaker": "Стражник",
+         "role": "Городская стража Валенхольма",
+         "text": "Веди себя прилично — и проблем не будет.",
          "portrait_color": (120, 120, 140)},
     ]
     npc = NPC(0, 0, "Стражник", appearance, dialogues, "guard")
@@ -351,20 +361,22 @@ def create_guard() -> NPC:
 
 def create_old_man() -> NPC:
     appearance = NPCAppearance(
-        body_color=(100, 90, 120),
-        skin_color=(215, 185, 165),
-        hair_color=(200, 200, 200),
-        hair_style="long",
-        outfit_color=(90, 80, 110),
-        has_beard=True,
-        accessory="hood"
+        body_color=(100, 90, 120), skin_color=(215, 185, 165),
+        hair_color=(200, 200, 200), hair_style="long",
+        outfit_color=(90, 80, 110), has_beard=True, accessory="hood"
     )
     dialogues = [
-        {"speaker": "Мудрец Аэлрон", "text": "А, молодой путник... Я ждал тебя.",
+        {"speaker": "Аэлрон",
+         "role": "Хранитель древних знаний",
+         "text": "А, молодой путник... Я ждал тебя.",
          "portrait_color": (180, 160, 220)},
-        {"speaker": "Мудрец Аэлрон", "text": "Звёзды предрекли твоё появление.",
+        {"speaker": "Аэлрон",
+         "role": "Хранитель древних знаний",
+         "text": "Звёзды предрекли твоё появление.",
          "portrait_color": (180, 160, 220)},
-        {"speaker": "Мудрец Аэлрон", "text": "Ищи Хранителей Памяти, если хочешь ответы.",
+        {"speaker": "Аэлрон",
+         "role": "Хранитель древних знаний",
+         "text": "Ищи Хранителей Памяти, если хочешь ответы.",
          "portrait_color": (180, 160, 220)},
     ]
     npc = NPC(0, 0, "Мудрец Аэлрон", appearance, dialogues, "sage")
@@ -374,17 +386,18 @@ def create_old_man() -> NPC:
 
 def create_barmaid() -> NPC:
     appearance = NPCAppearance(
-        body_color=(140, 80, 80),
-        skin_color=(240, 210, 185),
-        hair_color=(180, 100, 60),
-        hair_style="ponytail",
-        outfit_color=(150, 90, 90),
-        accessory="apron"
+        body_color=(140, 80, 80), skin_color=(240, 210, 185),
+        hair_color=(180, 100, 60), hair_style="ponytail",
+        outfit_color=(150, 90, 90), accessory="apron"
     )
     dialogues = [
-        {"speaker": "Барменша Лина", "text": "Чего желаете? Эль или что покрепче?",
+        {"speaker": "Лина",
+         "role": "Барменша таверны «Пьяный Грифон»",
+         "text": "Чего желаете? Эль или что покрепче?",
          "portrait_color": (200, 130, 130)},
-        {"speaker": "Барменша Лина", "text": "Слышали новости? В лесу опять видели волков.",
+        {"speaker": "Лина",
+         "role": "Барменша таверны «Пьяный Грифон»",
+         "text": "Слышали новости? В лесу опять видели волков.",
          "portrait_color": (200, 130, 130)},
     ]
     npc = NPC(0, 0, "Барменша Лина", appearance, dialogues, "barmaid")
@@ -401,31 +414,25 @@ def create_villager(name: str = "Житель") -> NPC:
         ((90, 80, 100), (70, 60, 80)),
     ]
     color_set = random.choice(colors)
-
     appearance = NPCAppearance(
         body_color=color_set[0],
-        skin_color=(
-            random.randint(200, 240),
-            random.randint(160, 200),
-            random.randint(140, 180)
-        ),
-        hair_color=(
-            random.randint(30, 100),
-            random.randint(20, 70),
-            random.randint(10, 50)
-        ),
+        skin_color=(random.randint(200, 240), random.randint(160, 200), random.randint(140, 180)),
+        hair_color=(random.randint(30, 100), random.randint(20, 70), random.randint(10, 50)),
         hair_style=random.choice(hair_styles),
         outfit_color=color_set[1],
         has_beard=random.random() < 0.3,
     )
     dialogues = [
-        {"speaker": name, "text": random.choice([
-            "Прекрасный день, не так ли?",
-            "У Гильдии всегда есть работа для таких как ты.",
-            "Остерегайся Туманного леса после заката.",
-            "В таверне подают отличный эль!",
-            "Слышал, в подземельях нашли древние руны...",
-        ]), "portrait_color": (150, 130, 120)},
+        {"speaker": name,
+         "role": "Житель Валенхольма",
+         "text": random.choice([
+             "Прекрасный день, не так ли?",
+             "У Гильдии всегда есть работа для таких как ты.",
+             "Остерегайся Туманного леса после заката.",
+             "В таверне подают отличный эль!",
+             "Слышал, в подземельях нашли древние руны...",
+         ]),
+         "portrait_color": (150, 130, 120)},
     ]
     npc = NPC(0, 0, name, appearance, dialogues, "villager")
     npc.appearance = appearance  # <-- ДОБАВИТЬ
